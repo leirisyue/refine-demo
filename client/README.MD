@@ -1,3 +1,4 @@
+[youtube](https://www.youtube.com/watch?v=QXxy8Uv1LnQ&t=3947s)
 # client
 
 <div align="center" style="margin: 30px;">
@@ -41,7 +42,6 @@ To learn more about **Refine**, please check out the [Documentation](https://ref
 
 - **REST Data Provider** [Docs](https://refine.dev/docs/core/providers/data-provider/#overview)
 - **Ant Design** [Docs](https://refine.dev/docs/ui-frameworks/antd/tutorial/)
-- **React Router** [Docs](https://refine.dev/docs/core/providers/router-provider/)
 - **Custom Auth Provider** [Docs](https://refine.dev/docs/core/providers/auth-provider/)
 
 ## License

@@ -1,6 +1,9 @@
+"use client";
+
 import { RefineThemes } from "@refinedev/antd";
-import { ConfigProvider, theme } from "antd";
-import {
+import { App as AntdApp, ConfigProvider, theme } from "antd";
+import Cookies from "js-cookie";
+import React, {
   type PropsWithChildren,
   createContext,
   useEffect,
@@ -16,28 +19,34 @@ export const ColorModeContext = createContext<ColorModeContextType>(
   {} as ColorModeContextType
 );
 
-export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
-  children,
-}) => {
-  const colorModeFromLocalStorage = localStorage.getItem("colorMode");
-  const isSystemPreferenceDark = window?.matchMedia(
-    "(prefers-color-scheme: dark)"
-  ).matches;
+type ColorModeContextProviderProps = {
+  defaultMode?: string;
+};
 
-  const systemPreference = isSystemPreferenceDark ? "dark" : "light";
-  const [mode, setMode] = useState(
-    colorModeFromLocalStorage || systemPreference
-  );
+export const ColorModeContextProvider: React.FC<
+  PropsWithChildren<ColorModeContextProviderProps>
+> = ({ children, defaultMode }) => {
+  const [isMounted, setIsMounted] = useState(false);
+  const [mode, setMode] = useState(defaultMode || "light");
 
   useEffect(() => {
-    window.localStorage.setItem("colorMode", mode);
-  }, [mode]);
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isMounted) {
+      const theme = Cookies.get("theme") || "light";
+      setMode(theme);
+    }
+  }, [isMounted]);
 
   const setColorMode = () => {
     if (mode === "light") {
       setMode("dark");
+      Cookies.set("theme", "dark");
     } else {
       setMode("light");
+      Cookies.set("theme", "light");
     }
   };
 
@@ -57,7 +66,7 @@ export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
           algorithm: mode === "light" ? defaultAlgorithm : darkAlgorithm,
         }}
       >
-        {children}
+        <AntdApp>{children}</AntdApp>
       </ConfigProvider>
     </ColorModeContext.Provider>
   );
